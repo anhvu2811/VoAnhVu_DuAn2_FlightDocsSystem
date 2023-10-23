@@ -3,9 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace VoAnhVu_DuAn2.Demo
+namespace VoAnhVu_DuAn2.Models
 {
-    public class Test
+    public class AppSetting
     {
+        public string SecretKey { get; set; }
     }
 }
