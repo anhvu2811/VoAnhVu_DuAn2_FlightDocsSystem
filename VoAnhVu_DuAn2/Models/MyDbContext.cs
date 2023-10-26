@@ -16,6 +16,11 @@ namespace VoAnhVu_DuAn2.Models
         #region
         public DbSet<RoleEntity> RoleEntities { get; set; }
         public DbSet<UserEntity> UserEntities { get; set; }
+        public DbSet<GroupPermissionEntity> GroupPermissionEntities { get; set; }
+        public DbSet<AccessEntity> AccessEntities { get; set; }
+        public DbSet<FlightEntity> FlightEntities { get; set; }
+        public DbSet<DocumentTypeEntity> DocumentTypeEntities { get; set; }
+        public DbSet<DocumentEntity> DocumentEntities { get; set; }
         #endregion
     }
 }

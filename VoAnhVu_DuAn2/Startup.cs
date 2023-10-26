@@ -71,12 +71,15 @@ namespace VoAnhVu_DuAn2
             services.AddDbContext<MyDbContext>(options => {
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"));
             });
-
+            services.AddScoped<AuthenticationService>();
             services.AddScoped<IRoleService, RoleService>();
             services.AddScoped<IUserService, UserService>();
-            services.AddScoped<AuthenticationService>();
+            services.AddScoped<IFlightService, FlightService>();
+            services.AddScoped<IAccessService, AccessService>();
+            services.AddScoped<IGroupPermissionService, GroupPermissionService>();
+            services.AddScoped<IDocumentTypeService, DocumentTypeService>();
 
-            services.Configure<AppSetting>(Configuration.GetSection("AppSettings"));
+            services.Configure<AppSetting>(Configuration.GetSection("AppSettings"));        
 
             var secretKey = Configuration["AppSettings:SecretKey"];
             var secretKeyBytes = Encoding.UTF8.GetBytes(secretKey);
