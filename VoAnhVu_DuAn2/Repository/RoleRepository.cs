@@ -1,24 +1,23 @@
-﻿using Microsoft.EntityFrameworkCore;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using VoAnhVu_DuAn2.Entities;
 using VoAnhVu_DuAn2.Models;
 
-namespace VoAnhVu_DuAn2.Services
+namespace VoAnhVu_DuAn2.Repository
 {
-    public interface IRoleService
+    public interface IRoleRepository
     {
         List<RoleEntity> getAllRole();
         void createRole(RoleEntity role);
         void updateRole(RoleEntity role);
         bool deleteRole(string id);
     }
-    public class RoleService : IRoleService
+    public class RoleRepository : IRoleRepository
     {
         private readonly MyDbContext _context;
-        public RoleService(MyDbContext context)
+        public RoleRepository(MyDbContext context)
         {
             _context = context;
         }
@@ -30,7 +29,7 @@ namespace VoAnhVu_DuAn2.Services
                 _context.RoleEntities.Add(role);
                 _context.SaveChanges();
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 throw ex;
             }
@@ -41,7 +40,7 @@ namespace VoAnhVu_DuAn2.Services
             try
             {
                 var role = _context.RoleEntities.FirstOrDefault(c => c.RoleId == id);
-                if(role is null)
+                if (role is null)
                 {
                     return false;
                 }
@@ -49,7 +48,7 @@ namespace VoAnhVu_DuAn2.Services
                 _context.SaveChanges();
                 return true;
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 throw ex;
             }
@@ -67,7 +66,7 @@ namespace VoAnhVu_DuAn2.Services
                 _context.RoleEntities.Update(role);
                 _context.SaveChanges();
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 throw ex;
             }

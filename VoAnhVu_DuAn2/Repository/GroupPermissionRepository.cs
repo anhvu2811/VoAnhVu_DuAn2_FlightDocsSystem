@@ -6,19 +6,19 @@ using System.Threading.Tasks;
 using VoAnhVu_DuAn2.Entities;
 using VoAnhVu_DuAn2.Models;
 
-namespace VoAnhVu_DuAn2.Services
+namespace VoAnhVu_DuAn2.Repository
 {
-    public interface IGroupPermissionService
+    public interface IGroupPermissionRepository
     {
         List<GroupPermissionModel> getAllGroupPermission();
         void createGroupPermission(GroupPermissionEntity gp);
         void updateGroupPermission(GroupPermissionEntity gp);
         bool deleteGroupPermission(string id);
     }
-    public class GroupPermissionService : IGroupPermissionService
+    public class GroupPermissionRepository : IGroupPermissionRepository
     {
         private readonly MyDbContext _context;
-        public GroupPermissionService(MyDbContext context)
+        public GroupPermissionRepository(MyDbContext context)
         {
             _context = context;
         }

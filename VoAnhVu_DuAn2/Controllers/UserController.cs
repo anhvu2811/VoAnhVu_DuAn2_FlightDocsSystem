@@ -8,6 +8,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using VoAnhVu_DuAn2.Entities;
 using VoAnhVu_DuAn2.Models;
+using VoAnhVu_DuAn2.Repository;
 using VoAnhVu_DuAn2.Services;
 
 namespace VoAnhVu_DuAn2.Controllers
@@ -16,12 +17,12 @@ namespace VoAnhVu_DuAn2.Controllers
     [ApiController]
     public class UserController : ControllerBase
     {
-        private readonly IUserService _userService;
+        private readonly IUserRepository _userRepository;
         private readonly AuthenticationService _authenticationService;
         private readonly IWebHostEnvironment _webHostEnvironment;
-        public UserController(IUserService userService, AuthenticationService authenticationService, IWebHostEnvironment webHostEnvironment)
+        public UserController(IUserRepository userRepository, AuthenticationService authenticationService, IWebHostEnvironment webHostEnvironment)
         {
-            _userService = userService;
+            _userRepository = userRepository;
             _authenticationService = authenticationService;
             _webHostEnvironment = webHostEnvironment;
         }
@@ -29,7 +30,7 @@ namespace VoAnhVu_DuAn2.Controllers
         [Route("/api/[Controller]/login")]
         public IActionResult Login([FromBody] LoginModel model)
         {
-            var user = _userService.GetUserByUserNameAndPassword(model.Email, model.Password);
+            var user = _userRepository.GetUserByUserNameAndPassword(model.Email, model.Password);
             if (user == null)
             {
                 //return Ok(new ApiResponse
@@ -40,7 +41,7 @@ namespace VoAnhVu_DuAn2.Controllers
                 return BadRequest("Invalid username/password");
             }
             var userId = user.UserId;
-            var roleName = _userService.getRoleNameByUserId(userId);
+            var roleName = _userRepository.getRoleNameByUserId(userId);
             return Ok(new ApiResponse
             {
                 Success = true,
@@ -54,7 +55,7 @@ namespace VoAnhVu_DuAn2.Controllers
         {
             try
             {
-                var user = _userService.getAllUser();
+                var user = _userRepository.getAllUser();
                 if (!user.Any())
                 {
                     return BadRequest("Không có người dùng nào.");
@@ -72,7 +73,7 @@ namespace VoAnhVu_DuAn2.Controllers
         {
             try
             {
-                var user = _userService.getUserById(id);
+                var user = _userRepository.getUserById(id);
                 if (user is null)
                 {
                     return BadRequest("Không tìm thấy người dùng.");
@@ -90,7 +91,7 @@ namespace VoAnhVu_DuAn2.Controllers
         {
             try
             {
-                var user = _userService.searchUser(key).ToList();
+                var user = _userRepository.searchUser(key).ToList();
                 if (!user.Any())
                 {
                     return BadRequest("Không tìm thấy người dùng.");
@@ -108,7 +109,7 @@ namespace VoAnhVu_DuAn2.Controllers
         {
             try
             {
-                var kt = _userService.getAllUser().Where(c => c.UserId == user.UserId);
+                var kt = _userRepository.getAllUser().Where(c => c.UserId == user.UserId);
                 if (kt.Any())
                 {
                     return BadRequest("Id này đã tồn tại ! Hãy nhập mã khác.");
@@ -125,7 +126,7 @@ namespace VoAnhVu_DuAn2.Controllers
                     Password = user.Password,
                     RoleId = user.Role.RoleId,
                 };
-                _userService.createUser(userEntity);
+                _userRepository.createUser(userEntity);
                 return Ok(userEntity);
             }
             catch (Exception ex)
@@ -151,7 +152,7 @@ namespace VoAnhVu_DuAn2.Controllers
                     Password = user.Password,
                     RoleId = user.Role.RoleId
                 };
-                _userService.updateUser(userEntity);
+                _userRepository.updateUser(userEntity);
                 return Ok(userEntity);
             }
             catch (Exception ex)
@@ -165,7 +166,7 @@ namespace VoAnhVu_DuAn2.Controllers
         {
             try
             {
-                var user = _userService.deleteUser(id);
+                var user = _userRepository.deleteUser(id);
                 if (!user)
                 {
                     return BadRequest("Không tìm thấy người dùng để xóa.");
@@ -183,7 +184,7 @@ namespace VoAnhVu_DuAn2.Controllers
         {
             try
             {
-                _userService.changePassword(userId, oldPassword, newPassword);
+                _userRepository.changePassword(userId, oldPassword, newPassword);
                 return Ok("Mật khẩu đã được thay đổi thành công.");
             }
             catch (Exception ex)
@@ -197,7 +198,7 @@ namespace VoAnhVu_DuAn2.Controllers
         {
             try
             {
-                var user = _userService.getUserById(userId);
+                var user = _userRepository.getUserById(userId);
                 if (user == null)
                 {
                     return NotFound("Người dùng không tồn tại.");
@@ -208,7 +209,7 @@ namespace VoAnhVu_DuAn2.Controllers
                     return BadRequest("Vui lòng chọn tệp ảnh.");
                 }
                 var imagePath = Path.Combine(_webHostEnvironment.ContentRootPath, "Images");
-                var uniqueFileName = Guid.NewGuid().ToString() + "_avatar.jpg";
+                var uniqueFileName = avatarFile.FileName;
                 var fullPath = Path.Combine(imagePath, uniqueFileName);
 
                 using (var fileStream = new FileStream(fullPath, FileMode.Create))
@@ -217,7 +218,7 @@ namespace VoAnhVu_DuAn2.Controllers
                 }
                 user.Avatar = "/Images/" + uniqueFileName;
 
-                _userService.updateAvatar(userId, user.Avatar);
+                _userRepository.updateAvatar(userId, user.Avatar);
                 return Ok("Đường dẫn ảnh đại diện đã được cập nhật.");
             }
             catch (Exception ex)
@@ -231,7 +232,7 @@ namespace VoAnhVu_DuAn2.Controllers
         {
             try
             {
-                _userService.deleteAvatar(userId);
+                _userRepository.deleteAvatar(userId);
                 return Ok("Avatar đã được xóa.");
             }
             catch (Exception ex)

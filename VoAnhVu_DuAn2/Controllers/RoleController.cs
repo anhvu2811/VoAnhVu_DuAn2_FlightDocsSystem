@@ -6,7 +6,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using VoAnhVu_DuAn2.Entities;
 using VoAnhVu_DuAn2.Models;
-using VoAnhVu_DuAn2.Services;
+using VoAnhVu_DuAn2.Repository;
 
 namespace VoAnhVu_DuAn2.Controllers
 {
@@ -14,10 +14,10 @@ namespace VoAnhVu_DuAn2.Controllers
     [ApiController]
     public class RoleController : ControllerBase
     {
-        private readonly IRoleService _roleService;
-        public RoleController(IRoleService roleService)
+        private readonly IRoleRepository _roleRepository;
+        public RoleController(IRoleRepository roleRepository)
         {
-            _roleService = roleService;
+            _roleRepository = roleRepository;
         }
         [HttpGet]
         [Route("/api/[Controller]/get-all-roles")]
@@ -25,7 +25,7 @@ namespace VoAnhVu_DuAn2.Controllers
         {
             try
             {
-                var role = _roleService.getAllRole();
+                var role = _roleRepository.getAllRole();
                 if (!role.Any())
                 {
                     return BadRequest("Không có vai trò nào.");
@@ -43,7 +43,7 @@ namespace VoAnhVu_DuAn2.Controllers
         {
             try
             {
-                var kt = _roleService.getAllRole().Where(c => c.RoleId == role.RoleId);
+                var kt = _roleRepository.getAllRole().Where(c => c.RoleId == role.RoleId);
                 if (kt.Any())
                 {
                     return BadRequest("Id đã tồn tại ! Hãy nhập mã khác");
@@ -54,7 +54,7 @@ namespace VoAnhVu_DuAn2.Controllers
                     RoleName = role.RoleName,
                     Description = role.Description,
                 };
-                _roleService.createRole(roleEntity);
+                _roleRepository.createRole(roleEntity);
                 return Ok(roleEntity);
             }
             catch (Exception ex)
@@ -74,7 +74,7 @@ namespace VoAnhVu_DuAn2.Controllers
                     RoleName = role.RoleName,
                     Description = role.Description,
                 };
-                _roleService.updateRole(rl);
+                _roleRepository.updateRole(rl);
                 return Ok(rl);
             }
             catch (Exception ex)
@@ -88,7 +88,7 @@ namespace VoAnhVu_DuAn2.Controllers
         {
             try
             {
-                bool role = _roleService.deleteRole(id);
+                bool role = _roleRepository.deleteRole(id);
                 if (!role)
                 {
                     return BadRequest("Không tìm thấy vai trò để xóa!");

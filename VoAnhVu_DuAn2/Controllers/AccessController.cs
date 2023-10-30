@@ -6,7 +6,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using VoAnhVu_DuAn2.Entities;
 using VoAnhVu_DuAn2.Models;
-using VoAnhVu_DuAn2.Services;
+using VoAnhVu_DuAn2.Repository;
 
 namespace VoAnhVu_DuAn2.Controllers
 {
@@ -14,10 +14,10 @@ namespace VoAnhVu_DuAn2.Controllers
     [ApiController]
     public class AccessController : ControllerBase
     {
-        private readonly IAccessService _accessService;
-        public AccessController(IAccessService accessService)
+        private readonly IAccessRepository _accessRepository;
+        public AccessController(IAccessRepository accessRepository)
         {
-            _accessService = accessService;
+            _accessRepository = accessRepository;
         }
         [HttpGet]
         [Route("/api/[Controller]/get-all-Access")]
@@ -25,7 +25,7 @@ namespace VoAnhVu_DuAn2.Controllers
         {
             try
             {
-                var access = _accessService.getAllAccess();
+                var access = _accessRepository.getAllAccess();
                 if (!access.Any())
                 {
                     return BadRequest("Không có truy cập nào.");
@@ -43,7 +43,7 @@ namespace VoAnhVu_DuAn2.Controllers
         {
             try
             {
-                var kt = _accessService.getAllAccess().Where(c => c.AccessId == access.AccessId);
+                var kt = _accessRepository.getAllAccess().Where(c => c.AccessId == access.AccessId);
                 if (kt.Any())
                 {
                     return BadRequest("Id đã tồn tại ! Hãy nhập mã khác");
@@ -53,7 +53,7 @@ namespace VoAnhVu_DuAn2.Controllers
                     AccessId = access.AccessId,
                     AccessName = access.AccessName
                 };
-                _accessService.createAccess(accessEntity);
+                _accessRepository.createAccess(accessEntity);
                 return Ok(accessEntity);
             }
             catch (Exception ex)
@@ -72,7 +72,7 @@ namespace VoAnhVu_DuAn2.Controllers
                     AccessId = access.AccessId,
                     AccessName = access.AccessName
                 };
-                _accessService.updateAccess(accessEntity);
+                _accessRepository.updateAccess(accessEntity);
                 return Ok(accessEntity);
             }
             catch (Exception ex)
@@ -86,7 +86,7 @@ namespace VoAnhVu_DuAn2.Controllers
         {
             try
             {
-                bool access = _accessService.deleteAccess(id);
+                bool access = _accessRepository.deleteAccess(id);
                 if (!access)
                 {
                     return BadRequest("Không tìm thấy quyền truy cập nào để xóa!");

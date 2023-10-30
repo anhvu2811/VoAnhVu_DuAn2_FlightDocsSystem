@@ -5,19 +5,19 @@ using System.Threading.Tasks;
 using VoAnhVu_DuAn2.Entities;
 using VoAnhVu_DuAn2.Models;
 
-namespace VoAnhVu_DuAn2.Services
+namespace VoAnhVu_DuAn2.Repository
 {
-    public interface IAccessService
+    public interface IAccessRepository
     {
         List<AccessEntity> getAllAccess();
         void createAccess(AccessEntity access);
         void updateAccess(AccessEntity access);
         bool deleteAccess(string id);
     }
-    public class AccessService : IAccessService
+    public class AccessRepository : IAccessRepository
     {
         private readonly MyDbContext _context;
-        public AccessService(MyDbContext context)
+        public AccessRepository(MyDbContext context)
         {
             _context = context;
         }

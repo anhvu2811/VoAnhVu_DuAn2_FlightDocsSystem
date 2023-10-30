@@ -7,9 +7,9 @@ using System.Threading.Tasks;
 using VoAnhVu_DuAn2.Entities;
 using VoAnhVu_DuAn2.Models;
 
-namespace VoAnhVu_DuAn2.Services
+namespace VoAnhVu_DuAn2.Repository
 {
-    public interface IUserService
+    public interface IUserRepository
     {
         List<UserModel> getAllUser();
         UserModel getUserById(string id);
@@ -23,10 +23,10 @@ namespace VoAnhVu_DuAn2.Services
         List<UserEntity> searchUser(string key);
         string getRoleNameByUserId(string id);
     }
-    public class UserService : IUserService
+    public class UserRepository : IUserRepository
     {
         private readonly MyDbContext _context;
-        public UserService(MyDbContext context)
+        public UserRepository(MyDbContext context)
         {
             _context = context;
         }
@@ -37,7 +37,7 @@ namespace VoAnhVu_DuAn2.Services
                 _context.UserEntities.Add(user);
                 _context.SaveChanges();
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 throw;
             }
@@ -48,7 +48,7 @@ namespace VoAnhVu_DuAn2.Services
             try
             {
                 var user = _context.UserEntities.FirstOrDefault(c => c.UserId == id);
-                if(user is null)
+                if (user is null)
                 {
                     return false;
                 }
@@ -56,7 +56,7 @@ namespace VoAnhVu_DuAn2.Services
                 _context.SaveChanges();
                 return true;
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 throw ex;
             }
@@ -84,7 +84,7 @@ namespace VoAnhVu_DuAn2.Services
         public UserModel getUserById(string id)
         {
             var user = _context.UserEntities.Include(u => u.Role).FirstOrDefault(c => c.UserId == id);
-            if(user != null)
+            if (user != null)
             {
                 var userModel = new UserModel
                 {
@@ -110,7 +110,7 @@ namespace VoAnhVu_DuAn2.Services
                 _context.UserEntities.Update(user);
                 _context.SaveChanges();
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 throw ex;
             }
@@ -121,9 +121,9 @@ namespace VoAnhVu_DuAn2.Services
             try
             {
                 var user = _context.UserEntities.FirstOrDefault(p => p.UserId == id);
-                if(user != null)
+                if (user != null)
                 {
-                    if(user.Password == oldPassword)
+                    if (user.Password == oldPassword)
                     {
                         user.Password = newPassword;
                         _context.SaveChanges();
@@ -138,7 +138,7 @@ namespace VoAnhVu_DuAn2.Services
                     throw new Exception("Người dùng không tồn tại.");
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 throw ex;
             }
@@ -167,13 +167,13 @@ namespace VoAnhVu_DuAn2.Services
             try
             {
                 var user = _context.UserEntities.FirstOrDefault(p => p.UserId == id);
-                if(user != null)
+                if (user != null)
                 {
                     user.Avatar = avatarUrl;
                     _context.SaveChanges();
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 throw ex;
             }
@@ -181,7 +181,7 @@ namespace VoAnhVu_DuAn2.Services
         public void deleteAvatar(string id)
         {
             var user = _context.UserEntities.FirstOrDefault(p => p.UserId == id);
-            if(user != null)
+            if (user != null)
             {
                 user.Avatar = null;
                 _context.SaveChanges();
@@ -191,9 +191,9 @@ namespace VoAnhVu_DuAn2.Services
         {
             key = key.ToLower();
 
-            return _context.UserEntities .Where(c => c.UserId.ToLower().Contains(key) ||
-                                                     c.FullName.ToLower().Contains(key) ||
-                                                     c.Gender.ToLower().Contains(key)).ToList();
+            return _context.UserEntities.Where(c => c.UserId.ToLower().Contains(key) ||
+                                                    c.FullName.ToLower().Contains(key) ||
+                                                    c.Gender.ToLower().Contains(key)).ToList();
         }
         public string getRoleNameByUserId(string id)
         {

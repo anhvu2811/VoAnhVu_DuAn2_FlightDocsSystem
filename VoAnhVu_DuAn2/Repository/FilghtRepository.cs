@@ -5,9 +5,9 @@ using System.Threading.Tasks;
 using VoAnhVu_DuAn2.Entities;
 using VoAnhVu_DuAn2.Models;
 
-namespace VoAnhVu_DuAn2.Services
+namespace VoAnhVu_DuAn2.Repository
 {
-    public interface IFlightService
+    public interface IFlightRepository
     {
         List<FlightEntity> getAllFlight();
         FlightModel getFlightById(string id);
@@ -15,10 +15,10 @@ namespace VoAnhVu_DuAn2.Services
         void updateFlight(FlightEntity flight);
         bool deleteFlight(string id);
     }
-    public class FlightService : IFlightService
+    public class FlightRepository : IFlightRepository
     {
         private readonly MyDbContext _context;
-        public FlightService(MyDbContext context)
+        public FlightRepository(MyDbContext context)
         {
             _context = context;
         }

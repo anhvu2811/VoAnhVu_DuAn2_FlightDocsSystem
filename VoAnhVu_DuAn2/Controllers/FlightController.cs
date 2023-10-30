@@ -6,7 +6,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using VoAnhVu_DuAn2.Entities;
 using VoAnhVu_DuAn2.Models;
-using VoAnhVu_DuAn2.Services;
+using VoAnhVu_DuAn2.Repository;
 
 namespace VoAnhVu_DuAn2.Controllers
 {
@@ -14,10 +14,10 @@ namespace VoAnhVu_DuAn2.Controllers
     [ApiController]
     public class FlightController : ControllerBase
     {
-        private readonly IFlightService _flightService;
-        public FlightController(IFlightService flightService)
+        private readonly IFlightRepository _flightRepository;
+        public FlightController(IFlightRepository flightRepository)
         {
-            _flightService = flightService;
+            _flightRepository = flightRepository;
         }
         [HttpGet]
         [Route("/api/[Controller]/get-all-flights")]
@@ -25,7 +25,7 @@ namespace VoAnhVu_DuAn2.Controllers
         {
             try
             {
-                var flight = _flightService.getAllFlight();
+                var flight = _flightRepository.getAllFlight();
                 if (!flight.Any())
                 {
                     return BadRequest("Không có chuyến bay nào.");
@@ -43,7 +43,7 @@ namespace VoAnhVu_DuAn2.Controllers
         {
             try
             {
-                var kt = _flightService.getAllFlight().Where(c => c.FlightId == flight.FlightId);
+                var kt = _flightRepository.getAllFlight().Where(c => c.FlightId == flight.FlightId);
                 if (kt.Any())
                 {
                     return BadRequest("Id đã tồn tại ! Hãy nhập mã khác");
@@ -55,7 +55,7 @@ namespace VoAnhVu_DuAn2.Controllers
                     PointOfLoading = flight.PointOfLoading,
                     PointOfUnloading = flight.PointOfUnloading
                 };
-                _flightService.createFlight(flightEntity);
+                _flightRepository.createFlight(flightEntity);
                 return Ok(flightEntity);
             }
             catch (Exception ex)
@@ -76,7 +76,7 @@ namespace VoAnhVu_DuAn2.Controllers
                     PointOfLoading = flight.PointOfLoading,
                     PointOfUnloading = flight.PointOfUnloading
                 };
-                _flightService.updateFlight(flightEntity);
+                _flightRepository.updateFlight(flightEntity);
                 return Ok(flightEntity);
             }
             catch (Exception ex)
@@ -90,7 +90,7 @@ namespace VoAnhVu_DuAn2.Controllers
         {
             try
             {
-                bool flight = _flightService.deleteFlight(id);
+                bool flight = _flightRepository.deleteFlight(id);
                 if (!flight)
                 {
                     return BadRequest("Không tìm thấy chuyến bay để xóa!");

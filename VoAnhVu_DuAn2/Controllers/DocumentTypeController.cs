@@ -6,7 +6,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using VoAnhVu_DuAn2.Entities;
 using VoAnhVu_DuAn2.Models;
-using VoAnhVu_DuAn2.Services;
+using VoAnhVu_DuAn2.Repository;
 
 namespace VoAnhVu_DuAn2.Controllers
 {
@@ -14,10 +14,10 @@ namespace VoAnhVu_DuAn2.Controllers
     [ApiController]
     public class DocumentTypeController : ControllerBase
     {
-        private readonly IDocumentTypeService _documentTypeService;
-        public DocumentTypeController(IDocumentTypeService documentTypeService)
+        private readonly IDocumentTypeRepository _documentTypeRepository;
+        public DocumentTypeController(IDocumentTypeRepository documentTypeRepository)
         {
-            _documentTypeService = documentTypeService;
+            _documentTypeRepository = documentTypeRepository;
         }
         [HttpGet]
         [Route("/api/[Controller]/get-all-document-type")]
@@ -25,7 +25,7 @@ namespace VoAnhVu_DuAn2.Controllers
         {
             try
             {
-                var dt = _documentTypeService.getAllDocumentType();
+                var dt = _documentTypeRepository.getAllDocumentType();
                 if (!dt.Any())
                 {
                     return BadRequest("Không có loại nào.");
@@ -43,7 +43,7 @@ namespace VoAnhVu_DuAn2.Controllers
         {
             try
             {
-                var kt = _documentTypeService.getAllDocumentType().Where(c => c.DocumentTypeId == dt.DocumentTypeId);
+                var kt = _documentTypeRepository.getAllDocumentType().Where(c => c.DocumentTypeId == dt.DocumentTypeId);
                 if (kt.Any())
                 {
                     return BadRequest("Id đã tồn tại ! Hãy nhập mã khác");
@@ -54,7 +54,7 @@ namespace VoAnhVu_DuAn2.Controllers
                     DocumentTypeName = dt.DocumentTypeName,
                     GroupPermissionId = dt.GroupPermission.GroupPermissionId,
                 };
-                _documentTypeService.createDocumentType(documentTypeEntity);
+                _documentTypeRepository.createDocumentType(documentTypeEntity);
                 return Ok(documentTypeEntity);
             }
             catch (Exception ex)
@@ -74,7 +74,7 @@ namespace VoAnhVu_DuAn2.Controllers
                     DocumentTypeName = dt.DocumentTypeName,
                     GroupPermissionId = dt.GroupPermission.GroupPermissionId,
                 };
-                _documentTypeService.updateDocumentType(documentTypeEntity);
+                _documentTypeRepository.updateDocumentType(documentTypeEntity);
                 return Ok(documentTypeEntity);
             }
             catch (Exception ex)
@@ -88,7 +88,7 @@ namespace VoAnhVu_DuAn2.Controllers
         {
             try
             {
-                bool dt = _documentTypeService.deleteDocumentType(id);
+                bool dt = _documentTypeRepository.deleteDocumentType(id);
                 if (!dt)
                 {
                     return BadRequest("Không tìm thấy loại tài liệu để xóa!");

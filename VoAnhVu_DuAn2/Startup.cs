@@ -16,6 +16,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using VoAnhVu_DuAn2.Models;
+using VoAnhVu_DuAn2.Repository;
 using VoAnhVu_DuAn2.Services;
 
 namespace VoAnhVu_DuAn2
@@ -72,12 +73,13 @@ namespace VoAnhVu_DuAn2
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"));
             });
             services.AddScoped<AuthenticationService>();
-            services.AddScoped<IRoleService, RoleService>();
-            services.AddScoped<IUserService, UserService>();
-            services.AddScoped<IFlightService, FlightService>();
-            services.AddScoped<IAccessService, AccessService>();
-            services.AddScoped<IGroupPermissionService, GroupPermissionService>();
-            services.AddScoped<IDocumentTypeService, DocumentTypeService>();
+            services.AddScoped<IRoleRepository, RoleRepository>();
+            services.AddScoped<IUserRepository, UserRepository>();
+            services.AddScoped<IFlightRepository, FlightRepository>();
+            services.AddScoped<IAccessRepository, AccessRepository>();
+            services.AddScoped<IGroupPermissionRepository, GroupPermissionRepository>();
+            services.AddScoped<IDocumentTypeRepository, DocumentTypeRepository>();
+            services.AddScoped<IDocumentRepository, DocumentRepository>();
 
             services.Configure<AppSetting>(Configuration.GetSection("AppSettings"));        
 

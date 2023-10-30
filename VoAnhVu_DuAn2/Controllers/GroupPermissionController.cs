@@ -6,7 +6,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using VoAnhVu_DuAn2.Entities;
 using VoAnhVu_DuAn2.Models;
-using VoAnhVu_DuAn2.Services;
+using VoAnhVu_DuAn2.Repository;
 
 namespace VoAnhVu_DuAn2.Controllers
 {
@@ -14,10 +14,10 @@ namespace VoAnhVu_DuAn2.Controllers
     [ApiController]
     public class GroupPermissionController : ControllerBase
     {
-        private readonly IGroupPermissionService _groupPermissionService;
-        public GroupPermissionController(IGroupPermissionService groupPermissionService)
+        private readonly IGroupPermissionRepository _groupPermissionRepository;
+        public GroupPermissionController(IGroupPermissionRepository groupPermissionRepository)
         {
-            _groupPermissionService = groupPermissionService;
+            _groupPermissionRepository = groupPermissionRepository;
         }
         [HttpGet]
         [Route("/api/[Controller]/get-all-group-permission")]
@@ -25,7 +25,7 @@ namespace VoAnhVu_DuAn2.Controllers
         {
             try
             {
-                var gp = _groupPermissionService.getAllGroupPermission();
+                var gp = _groupPermissionRepository.getAllGroupPermission();
                 if (!gp.Any())
                 {
                     return BadRequest("Không có nhóm quyền nào.");
@@ -43,7 +43,7 @@ namespace VoAnhVu_DuAn2.Controllers
         {
             try
             {
-                var kt = _groupPermissionService.getAllGroupPermission().Where(c => c.GroupPermissionId == gp.GroupPermissionId);
+                var kt = _groupPermissionRepository.getAllGroupPermission().Where(c => c.GroupPermissionId == gp.GroupPermissionId);
                 if (kt.Any())
                 {
                     return BadRequest("Id đã tồn tại ! Hãy nhập mã khác");
@@ -56,7 +56,7 @@ namespace VoAnhVu_DuAn2.Controllers
                     Note = gp.Note,
                     AccessId = gp.Access.AccessId
                 };
-                _groupPermissionService.createGroupPermission(groupPermissionEntity);
+                _groupPermissionRepository.createGroupPermission(groupPermissionEntity);
                 return Ok(groupPermissionEntity);
             }
             catch (Exception ex)
@@ -78,7 +78,7 @@ namespace VoAnhVu_DuAn2.Controllers
                     Note = gp.Note,
                     AccessId = gp.Access.AccessId
                 };
-                _groupPermissionService.updateGroupPermission(groupPermissionEntity);
+                _groupPermissionRepository.updateGroupPermission(groupPermissionEntity);
                 return Ok(groupPermissionEntity);
             }
             catch (Exception ex)
@@ -92,7 +92,7 @@ namespace VoAnhVu_DuAn2.Controllers
         {
             try
             {
-                bool role = _groupPermissionService.deleteGroupPermission(id);
+                bool role = _groupPermissionRepository.deleteGroupPermission(id);
                 if (!role)
                 {
                     return BadRequest("Không tìm thấy nhóm quyền để xóa!");
