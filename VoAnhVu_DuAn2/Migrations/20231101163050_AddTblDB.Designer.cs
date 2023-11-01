@@ -5,12 +5,12 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using VoAnhVu_DuAn2.Models;
+using VoAnhVu_DuAn2.Data;
 
 namespace VoAnhVu_DuAn2.Migrations
 {
     [DbContext(typeof(MyDbContext))]
-    [Migration("20231026050948_AddTblDB")]
+    [Migration("20231101163050_AddTblDB")]
     partial class AddTblDB
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -21,7 +21,7 @@ namespace VoAnhVu_DuAn2.Migrations
                 .HasAnnotation("ProductVersion", "5.0.17")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-            modelBuilder.Entity("VoAnhVu_DuAn2.Entities.AccessEntity", b =>
+            modelBuilder.Entity("VoAnhVu_DuAn2.Models.AccessModel", b =>
                 {
                     b.Property<string>("AccessId")
                         .HasColumnType("nvarchar(450)");
@@ -34,7 +34,7 @@ namespace VoAnhVu_DuAn2.Migrations
                     b.ToTable("Access");
                 });
 
-            modelBuilder.Entity("VoAnhVu_DuAn2.Entities.DocumentEntity", b =>
+            modelBuilder.Entity("VoAnhVu_DuAn2.Models.DocumentModel", b =>
                 {
                     b.Property<string>("DocumentId")
                         .HasColumnType("nvarchar(450)");
@@ -60,8 +60,8 @@ namespace VoAnhVu_DuAn2.Migrations
                     b.Property<string>("UserId")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("Version")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<double>("Version")
+                        .HasColumnType("float");
 
                     b.HasKey("DocumentId");
 
@@ -74,7 +74,7 @@ namespace VoAnhVu_DuAn2.Migrations
                     b.ToTable("Document");
                 });
 
-            modelBuilder.Entity("VoAnhVu_DuAn2.Entities.DocumentTypeEntity", b =>
+            modelBuilder.Entity("VoAnhVu_DuAn2.Models.DocumentTypeModel", b =>
                 {
                     b.Property<string>("DocumentTypeId")
                         .HasColumnType("nvarchar(450)");
@@ -92,7 +92,7 @@ namespace VoAnhVu_DuAn2.Migrations
                     b.ToTable("DocumentType");
                 });
 
-            modelBuilder.Entity("VoAnhVu_DuAn2.Entities.FlightEntity", b =>
+            modelBuilder.Entity("VoAnhVu_DuAn2.Models.FlightModel", b =>
                 {
                     b.Property<string>("FlightId")
                         .HasColumnType("nvarchar(450)");
@@ -111,7 +111,7 @@ namespace VoAnhVu_DuAn2.Migrations
                     b.ToTable("Flight");
                 });
 
-            modelBuilder.Entity("VoAnhVu_DuAn2.Entities.GroupPermissionEntity", b =>
+            modelBuilder.Entity("VoAnhVu_DuAn2.Models.GroupPermissionModel", b =>
                 {
                     b.Property<string>("GroupPermissionId")
                         .HasColumnType("nvarchar(450)");
@@ -135,7 +135,7 @@ namespace VoAnhVu_DuAn2.Migrations
                     b.ToTable("GroupPermission");
                 });
 
-            modelBuilder.Entity("VoAnhVu_DuAn2.Entities.RoleEntity", b =>
+            modelBuilder.Entity("VoAnhVu_DuAn2.Models.RoleModel", b =>
                 {
                     b.Property<string>("RoleId")
                         .HasColumnType("nvarchar(450)");
@@ -151,7 +151,7 @@ namespace VoAnhVu_DuAn2.Migrations
                     b.ToTable("Role");
                 });
 
-            modelBuilder.Entity("VoAnhVu_DuAn2.Entities.UserEntity", b =>
+            modelBuilder.Entity("VoAnhVu_DuAn2.Models.UserModel", b =>
                 {
                     b.Property<string>("UserId")
                         .HasColumnType("nvarchar(450)");
@@ -187,17 +187,17 @@ namespace VoAnhVu_DuAn2.Migrations
                     b.ToTable("User");
                 });
 
-            modelBuilder.Entity("VoAnhVu_DuAn2.Entities.DocumentEntity", b =>
+            modelBuilder.Entity("VoAnhVu_DuAn2.Models.DocumentModel", b =>
                 {
-                    b.HasOne("VoAnhVu_DuAn2.Entities.DocumentTypeEntity", "DocumentType")
+                    b.HasOne("VoAnhVu_DuAn2.Models.DocumentTypeModel", "DocumentType")
                         .WithMany()
                         .HasForeignKey("DocumentTypeId");
 
-                    b.HasOne("VoAnhVu_DuAn2.Entities.FlightEntity", "Flight")
+                    b.HasOne("VoAnhVu_DuAn2.Models.FlightModel", "Flight")
                         .WithMany()
                         .HasForeignKey("FlightId");
 
-                    b.HasOne("VoAnhVu_DuAn2.Entities.UserEntity", "User")
+                    b.HasOne("VoAnhVu_DuAn2.Models.UserModel", "User")
                         .WithMany()
                         .HasForeignKey("UserId");
 
@@ -208,27 +208,27 @@ namespace VoAnhVu_DuAn2.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("VoAnhVu_DuAn2.Entities.DocumentTypeEntity", b =>
+            modelBuilder.Entity("VoAnhVu_DuAn2.Models.DocumentTypeModel", b =>
                 {
-                    b.HasOne("VoAnhVu_DuAn2.Entities.GroupPermissionEntity", "GroupPermission")
+                    b.HasOne("VoAnhVu_DuAn2.Models.GroupPermissionModel", "GroupPermission")
                         .WithMany()
                         .HasForeignKey("GroupPermissionId");
 
                     b.Navigation("GroupPermission");
                 });
 
-            modelBuilder.Entity("VoAnhVu_DuAn2.Entities.GroupPermissionEntity", b =>
+            modelBuilder.Entity("VoAnhVu_DuAn2.Models.GroupPermissionModel", b =>
                 {
-                    b.HasOne("VoAnhVu_DuAn2.Entities.AccessEntity", "Access")
+                    b.HasOne("VoAnhVu_DuAn2.Models.AccessModel", "Access")
                         .WithMany()
                         .HasForeignKey("AccessId");
 
                     b.Navigation("Access");
                 });
 
-            modelBuilder.Entity("VoAnhVu_DuAn2.Entities.UserEntity", b =>
+            modelBuilder.Entity("VoAnhVu_DuAn2.Models.UserModel", b =>
                 {
-                    b.HasOne("VoAnhVu_DuAn2.Entities.RoleEntity", "Role")
+                    b.HasOne("VoAnhVu_DuAn2.Models.RoleModel", "Role")
                         .WithMany()
                         .HasForeignKey("RoleId");
 

@@ -4,7 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using VoAnhVu_DuAn2.Entities;
+using VoAnhVu_DuAn2.DTO;
 using VoAnhVu_DuAn2.Models;
 using VoAnhVu_DuAn2.Repository;
 
@@ -39,7 +39,7 @@ namespace VoAnhVu_DuAn2.Controllers
         }
         [HttpPost]
         [Route("/api/[Controller]/create-role")]
-        public IActionResult createRole(RoleModel role)
+        public IActionResult createRole(RoleDTO role)
         {
             try
             {
@@ -48,14 +48,14 @@ namespace VoAnhVu_DuAn2.Controllers
                 {
                     return BadRequest("Id đã tồn tại ! Hãy nhập mã khác");
                 }
-                RoleEntity roleEntity = new RoleEntity
+                RoleModel roleModel = new RoleModel
                 {
                     RoleId = role.RoleId,
                     RoleName = role.RoleName,
                     Description = role.Description,
                 };
-                _roleRepository.createRole(roleEntity);
-                return Ok(roleEntity);
+                _roleRepository.createRole(roleModel);
+                return Ok(roleModel);
             }
             catch (Exception ex)
             {
@@ -64,18 +64,18 @@ namespace VoAnhVu_DuAn2.Controllers
         }
         [HttpPut]
         [Route("/api/[Controller]/update-role")]
-        public IActionResult updateRole(RoleModel role)
+        public IActionResult updateRole(RoleDTO role)
         {
             try
             {
-                RoleEntity rl = new RoleEntity
+                RoleModel roleModel = new RoleModel
                 {
                     RoleId = role.RoleId,
                     RoleName = role.RoleName,
                     Description = role.Description,
                 };
-                _roleRepository.updateRole(rl);
-                return Ok(rl);
+                _roleRepository.updateRole(roleModel);
+                return Ok(roleModel);
             }
             catch (Exception ex)
             {

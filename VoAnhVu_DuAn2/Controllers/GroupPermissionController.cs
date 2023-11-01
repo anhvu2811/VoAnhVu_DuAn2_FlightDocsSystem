@@ -4,7 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using VoAnhVu_DuAn2.Entities;
+using VoAnhVu_DuAn2.DTO;
 using VoAnhVu_DuAn2.Models;
 using VoAnhVu_DuAn2.Repository;
 
@@ -39,7 +39,7 @@ namespace VoAnhVu_DuAn2.Controllers
         }
         [HttpPost]
         [Route("/api/[Controller]/create-role")]
-        public IActionResult createGroupPermission(GroupPermissionModel gp)
+        public IActionResult createGroupPermission(GroupPermissionDTO gp)
         {
             try
             {
@@ -48,7 +48,7 @@ namespace VoAnhVu_DuAn2.Controllers
                 {
                     return BadRequest("Id đã tồn tại ! Hãy nhập mã khác");
                 }
-                GroupPermissionEntity groupPermissionEntity = new GroupPermissionEntity
+                GroupPermissionModel groupPermissionModel = new GroupPermissionModel
                 {
                     GroupPermissionId = gp.GroupPermissionId,
                     GroupPermissionName = gp.GroupPermissionName,
@@ -56,8 +56,8 @@ namespace VoAnhVu_DuAn2.Controllers
                     Note = gp.Note,
                     AccessId = gp.Access.AccessId
                 };
-                _groupPermissionRepository.createGroupPermission(groupPermissionEntity);
-                return Ok(groupPermissionEntity);
+                _groupPermissionRepository.createGroupPermission(groupPermissionModel);
+                return Ok(groupPermissionModel);
             }
             catch (Exception ex)
             {
@@ -66,11 +66,11 @@ namespace VoAnhVu_DuAn2.Controllers
         }
         [HttpPut]
         [Route("/api/[Controller]/update-group-permission")]
-        public IActionResult updateGroupPermissione(GroupPermissionModel gp)
+        public IActionResult updateGroupPermissione(GroupPermissionDTO gp)
         {
             try
             {
-                GroupPermissionEntity groupPermissionEntity = new GroupPermissionEntity
+                GroupPermissionModel groupPermissionModel = new GroupPermissionModel
                 {
                     GroupPermissionId = gp.GroupPermissionId,
                     GroupPermissionName = gp.GroupPermissionName,
@@ -78,8 +78,8 @@ namespace VoAnhVu_DuAn2.Controllers
                     Note = gp.Note,
                     AccessId = gp.Access.AccessId
                 };
-                _groupPermissionRepository.updateGroupPermission(groupPermissionEntity);
-                return Ok(groupPermissionEntity);
+                _groupPermissionRepository.updateGroupPermission(groupPermissionModel);
+                return Ok(groupPermissionModel);
             }
             catch (Exception ex)
             {

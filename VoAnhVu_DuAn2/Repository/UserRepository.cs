@@ -4,23 +4,24 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using VoAnhVu_DuAn2.Entities;
+using VoAnhVu_DuAn2.Data;
+using VoAnhVu_DuAn2.DTO;
 using VoAnhVu_DuAn2.Models;
 
 namespace VoAnhVu_DuAn2.Repository
 {
     public interface IUserRepository
     {
-        List<UserModel> getAllUser();
-        UserModel getUserById(string id);
-        void createUser(UserEntity user);
-        void updateUser(UserEntity user);
+        List<UserDTO> getAllUser();
+        UserDTO getUserById(string id);
+        void createUser(UserModel user);
+        void updateUser(UserModel user);
         bool deleteUser(string id);
-        UserEntity GetUserByUserNameAndPassword(string username, string password);
+        UserModel GetUserByUserNameAndPassword(string username, string password);
         void changePassword(string id, string oldPassword, string newPassword);
         void updateAvatar(string id, string avatarUrl);
         void deleteAvatar(string id);
-        List<UserEntity> searchUser(string key);
+        List<UserModel> searchUser(string key);
         string getRoleNameByUserId(string id);
     }
     public class UserRepository : IUserRepository
@@ -30,11 +31,11 @@ namespace VoAnhVu_DuAn2.Repository
         {
             _context = context;
         }
-        public void createUser(UserEntity user)
+        public void createUser(UserModel user)
         {
             try
             {
-                _context.UserEntities.Add(user);
+                _context.UserModels.Add(user);
                 _context.SaveChanges();
             }
             catch (Exception ex)
@@ -47,12 +48,12 @@ namespace VoAnhVu_DuAn2.Repository
         {
             try
             {
-                var user = _context.UserEntities.FirstOrDefault(c => c.UserId == id);
+                var user = _context.UserModels.FirstOrDefault(c => c.UserId == id);
                 if (user is null)
                 {
                     return false;
                 }
-                _context.UserEntities.Remove(user);
+                _context.UserModels.Remove(user);
                 _context.SaveChanges();
                 return true;
             }
@@ -62,11 +63,11 @@ namespace VoAnhVu_DuAn2.Repository
             }
         }
 
-        public List<UserModel> getAllUser()
+        public List<UserDTO> getAllUser()
         {
-            var users = _context.UserEntities
+            var users = _context.UserModels
                 .Include(user => user.Role)
-                .Select(user => new UserModel
+                .Select(user => new UserDTO
                 {
                     UserId = user.UserId,
                     Avatar = user.Avatar,
@@ -81,12 +82,12 @@ namespace VoAnhVu_DuAn2.Repository
             return users;
         }
 
-        public UserModel getUserById(string id)
+        public UserDTO getUserById(string id)
         {
-            var user = _context.UserEntities.Include(u => u.Role).FirstOrDefault(c => c.UserId == id);
+            var user = _context.UserModels.Include(u => u.Role).FirstOrDefault(c => c.UserId == id);
             if (user != null)
             {
-                var userModel = new UserModel
+                var userModel = new UserDTO
                 {
                     UserId = user.UserId,
                     Avatar = user.Avatar,
@@ -103,11 +104,11 @@ namespace VoAnhVu_DuAn2.Repository
             return null;
         }
 
-        public void updateUser(UserEntity user)
+        public void updateUser(UserModel user)
         {
             try
             {
-                _context.UserEntities.Update(user);
+                _context.UserModels.Update(user);
                 _context.SaveChanges();
             }
             catch (Exception ex)
@@ -120,7 +121,7 @@ namespace VoAnhVu_DuAn2.Repository
         {
             try
             {
-                var user = _context.UserEntities.FirstOrDefault(p => p.UserId == id);
+                var user = _context.UserModels.FirstOrDefault(p => p.UserId == id);
                 if (user != null)
                 {
                     if (user.Password == oldPassword)
@@ -143,11 +144,11 @@ namespace VoAnhVu_DuAn2.Repository
                 throw ex;
             }
         }
-        public UserEntity GetUserByUserNameAndPassword(string email, string password)
+        public UserModel GetUserByUserNameAndPassword(string email, string password)
         {
             if (IsValidVietJetAirEmail(email))
             {
-                return _context.UserEntities.FirstOrDefault(p => p.Email == email && p.Password == password);
+                return _context.UserModels.FirstOrDefault(p => p.Email == email && p.Password == password);
             }
             else
             {
@@ -166,7 +167,7 @@ namespace VoAnhVu_DuAn2.Repository
         {
             try
             {
-                var user = _context.UserEntities.FirstOrDefault(p => p.UserId == id);
+                var user = _context.UserModels.FirstOrDefault(p => p.UserId == id);
                 if (user != null)
                 {
                     user.Avatar = avatarUrl;
@@ -180,24 +181,24 @@ namespace VoAnhVu_DuAn2.Repository
         }
         public void deleteAvatar(string id)
         {
-            var user = _context.UserEntities.FirstOrDefault(p => p.UserId == id);
+            var user = _context.UserModels.FirstOrDefault(p => p.UserId == id);
             if (user != null)
             {
                 user.Avatar = null;
                 _context.SaveChanges();
             }
         }
-        public List<UserEntity> searchUser(string key)
+        public List<UserModel> searchUser(string key)
         {
             key = key.ToLower();
 
-            return _context.UserEntities.Where(c => c.UserId.ToLower().Contains(key) ||
+            return _context.UserModels.Where(c => c.UserId.ToLower().Contains(key) ||
                                                     c.FullName.ToLower().Contains(key) ||
                                                     c.Gender.ToLower().Contains(key)).ToList();
         }
         public string getRoleNameByUserId(string id)
         {
-            var roleName = _context.UserEntities.Where(u => u.UserId == id).Select(u => u.Role.RoleName).FirstOrDefault();
+            var roleName = _context.UserModels.Where(u => u.UserId == id).Select(u => u.Role.RoleName).FirstOrDefault();
             return roleName;
         }
     }

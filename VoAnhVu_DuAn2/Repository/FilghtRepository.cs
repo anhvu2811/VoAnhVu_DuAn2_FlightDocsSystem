@@ -2,17 +2,18 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using VoAnhVu_DuAn2.Entities;
+using VoAnhVu_DuAn2.Data;
+using VoAnhVu_DuAn2.DTO;
 using VoAnhVu_DuAn2.Models;
 
 namespace VoAnhVu_DuAn2.Repository
 {
     public interface IFlightRepository
     {
-        List<FlightEntity> getAllFlight();
-        FlightModel getFlightById(string id);
-        void createFlight(FlightEntity flight);
-        void updateFlight(FlightEntity flight);
+        List<FlightModel> getAllFlight();
+        FlightDTO getFlightById(string id);
+        void createFlight(FlightModel flight);
+        void updateFlight(FlightModel flight);
         bool deleteFlight(string id);
     }
     public class FlightRepository : IFlightRepository
@@ -23,11 +24,11 @@ namespace VoAnhVu_DuAn2.Repository
             _context = context;
         }
 
-        public void createFlight(FlightEntity flight)
+        public void createFlight(FlightModel flight)
         {
             try
             {
-                _context.FlightEntities.Add(flight);
+                _context.FlightModels.Add(flight);
                 _context.SaveChanges();
             }
             catch (Exception ex)
@@ -40,12 +41,12 @@ namespace VoAnhVu_DuAn2.Repository
         {
             try
             {
-                var flight = _context.FlightEntities.FirstOrDefault(c => c.FlightId == id);
+                var flight = _context.FlightModels.FirstOrDefault(c => c.FlightId == id);
                 if (flight is null)
                 {
                     return false;
                 }
-                _context.FlightEntities.Remove(flight);
+                _context.FlightModels.Remove(flight);
                 _context.SaveChanges();
                 return true;
             }
@@ -55,17 +56,17 @@ namespace VoAnhVu_DuAn2.Repository
             }
         }
 
-        public List<FlightEntity> getAllFlight()
+        public List<FlightModel> getAllFlight()
         {
-            return _context.FlightEntities.ToList();
+            return _context.FlightModels.ToList();
         }
 
-        public FlightModel getFlightById(string id)
+        public FlightDTO getFlightById(string id)
         {
-            var flight = _context.FlightEntities.FirstOrDefault(c => c.FlightId == id);
+            var flight = _context.FlightModels.FirstOrDefault(c => c.FlightId == id);
             if (flight != null)
             {
-                var flightModel = new FlightModel
+                var flightModel = new FlightDTO
                 {
                     FlightId = flight.FlightId,
                     Date = flight.Date,
@@ -77,11 +78,11 @@ namespace VoAnhVu_DuAn2.Repository
             return null;
         }
 
-        public void updateFlight(FlightEntity flight)
+        public void updateFlight(FlightModel flight)
         {
             try
             {
-                _context.FlightEntities.Update(flight);
+                _context.FlightModels.Update(flight);
                 _context.SaveChanges();
             }
             catch (Exception ex)

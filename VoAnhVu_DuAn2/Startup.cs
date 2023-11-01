@@ -15,6 +15,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using VoAnhVu_DuAn2.Data;
+using VoAnhVu_DuAn2.DTO;
 using VoAnhVu_DuAn2.Models;
 using VoAnhVu_DuAn2.Repository;
 using VoAnhVu_DuAn2.Services;

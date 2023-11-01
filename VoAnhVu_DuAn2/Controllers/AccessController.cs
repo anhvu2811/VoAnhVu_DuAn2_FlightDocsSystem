@@ -4,7 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using VoAnhVu_DuAn2.Entities;
+using VoAnhVu_DuAn2.DTO;
 using VoAnhVu_DuAn2.Models;
 using VoAnhVu_DuAn2.Repository;
 
@@ -39,7 +39,7 @@ namespace VoAnhVu_DuAn2.Controllers
         }
         [HttpPost]
         [Route("/api/[Controller]/create-access")]
-        public IActionResult createAccess(AccessModel access)
+        public IActionResult createAccess(AccessDTO access)
         {
             try
             {
@@ -48,13 +48,13 @@ namespace VoAnhVu_DuAn2.Controllers
                 {
                     return BadRequest("Id đã tồn tại ! Hãy nhập mã khác");
                 }
-                AccessEntity accessEntity = new AccessEntity
+                AccessModel accessModel = new AccessModel
                 {
                     AccessId = access.AccessId,
                     AccessName = access.AccessName
                 };
-                _accessRepository.createAccess(accessEntity);
-                return Ok(accessEntity);
+                _accessRepository.createAccess(accessModel);
+                return Ok(accessModel);
             }
             catch (Exception ex)
             {
@@ -63,17 +63,17 @@ namespace VoAnhVu_DuAn2.Controllers
         }
         [HttpPut]
         [Route("/api/[Controller]/update-access")]
-        public IActionResult updateAccess(AccessModel access)
+        public IActionResult updateAccess(AccessDTO access)
         {
             try
             {
-                AccessEntity accessEntity = new AccessEntity
+                AccessModel accessModel = new AccessModel
                 {
                     AccessId = access.AccessId,
                     AccessName = access.AccessName
                 };
-                _accessRepository.updateAccess(accessEntity);
-                return Ok(accessEntity);
+                _accessRepository.updateAccess(accessModel);
+                return Ok(accessModel);
             }
             catch (Exception ex)
             {

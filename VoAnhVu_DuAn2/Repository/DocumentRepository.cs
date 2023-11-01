@@ -3,20 +3,22 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using VoAnhVu_DuAn2.Entities;
+using VoAnhVu_DuAn2.Data;
+using VoAnhVu_DuAn2.DTO;
 using VoAnhVu_DuAn2.Models;
 
 namespace VoAnhVu_DuAn2.Repository
 {
     public interface IDocumentRepository
     {
-        List<DocumentModel> getAllDocument();
-        DocumentModel getDocumentById(string id);
-        void createDocument(DocumentEntity dt);
-        void updateDocument(DocumentEntity dt);
+        List<DocumentDTO> getAllDocument();
+        DocumentDTO getDocumentById(string id);
+        void createDocument(DocumentModel dt);
+        void updateDocument(DocumentModel dt);
         bool deleteDocument(string id);
         void uploadFile(string id, string url, string fileName);
         void deleteFile(string id);
+        int CountDocumentsForFlight(string flightId);
     }
     public class DocumentRepository : IDocumentRepository
     {
@@ -26,11 +28,11 @@ namespace VoAnhVu_DuAn2.Repository
             _context = context;
         }
 
-        public void createDocument(DocumentEntity dt)
+        public void createDocument(DocumentModel dt)
         {
             try
             {
-                _context.DocumentEntities.Add(dt);
+                _context.DocumentModels.Add(dt);
                 _context.SaveChanges();
             }
             catch (Exception ex)
@@ -43,12 +45,12 @@ namespace VoAnhVu_DuAn2.Repository
         {
             try
             {
-                var dt = _context.DocumentEntities.FirstOrDefault(c => c.DocumentId == id);
+                var dt = _context.DocumentModels.FirstOrDefault(c => c.DocumentId == id);
                 if (dt is null)
                 {
                     return false;
                 }
-                _context.DocumentEntities.Remove(dt);
+                _context.DocumentModels.Remove(dt);
                 _context.SaveChanges();
                 return true;
             }
@@ -58,13 +60,13 @@ namespace VoAnhVu_DuAn2.Repository
             }
         }
 
-        public List<DocumentModel> getAllDocument()
+        public List<DocumentDTO> getAllDocument()
         {
-            var docs = _context.DocumentEntities
+            var docs = _context.DocumentModels
                 .Include(doc => doc.DocumentType)
                 .Include(doc => doc.Flight)
                 .Include(doc => doc.User)
-                .Select(doc => new DocumentModel
+                .Select(doc => new DocumentDTO
                 {
                     DocumentId = doc.DocumentId,
                     DocumentName = doc.DocumentName,
@@ -79,16 +81,16 @@ namespace VoAnhVu_DuAn2.Repository
             return docs;
         }
 
-        public DocumentModel getDocumentById(string id)
+        public DocumentDTO getDocumentById(string id)
         {
-            var docEntity = _context.DocumentEntities
+            var docEntity = _context.DocumentModels
                 .Include(doc => doc.DocumentType)
                 .Include(doc => doc.Flight)
                 .Include(doc => doc.User)
                 .FirstOrDefault(c => c.DocumentId == id);
             if (docEntity != null)
             {
-                var documentModel = new DocumentModel
+                var documentModel = new DocumentDTO
                 {
                     DocumentId = docEntity.DocumentId,
                     DocumentName = docEntity.DocumentName,
@@ -105,11 +107,11 @@ namespace VoAnhVu_DuAn2.Repository
             return null;
         }
 
-        public void updateDocument(DocumentEntity dt)
+        public void updateDocument(DocumentModel dt)
         {
             try
             {
-                _context.DocumentEntities.Update(dt);
+                _context.DocumentModels.Update(dt);
                 _context.SaveChanges();
             }
             catch (Exception ex)
@@ -121,7 +123,7 @@ namespace VoAnhVu_DuAn2.Repository
         {
             try
             {
-                var doc = _context.DocumentEntities.FirstOrDefault(u => u.DocumentId == id);
+                var doc = _context.DocumentModels.FirstOrDefault(u => u.DocumentId == id);
                 if (doc != null)
                 {
                     doc.FileUpLoad = url;
@@ -138,7 +140,7 @@ namespace VoAnhVu_DuAn2.Repository
         {
             try
             {
-                var doc = _context.DocumentEntities.FirstOrDefault(u => u.DocumentId == id);
+                var doc = _context.DocumentModels.FirstOrDefault(u => u.DocumentId == id);
                 if (doc != null)
                 {
                     doc.FileUpLoad = null;
@@ -151,5 +153,10 @@ namespace VoAnhVu_DuAn2.Repository
                 throw ex;
             }
         }
+        public int CountDocumentsForFlight(string flightId)
+        {
+            return _context.DocumentModels.Count(d => d.FlightId == flightId);
+        }
+
     }
 }

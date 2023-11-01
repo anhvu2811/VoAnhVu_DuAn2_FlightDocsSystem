@@ -4,7 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using VoAnhVu_DuAn2.Entities;
+using VoAnhVu_DuAn2.DTO;
 using VoAnhVu_DuAn2.Models;
 using VoAnhVu_DuAn2.Repository;
 
@@ -39,7 +39,7 @@ namespace VoAnhVu_DuAn2.Controllers
         }
         [HttpPost]
         [Route("/api/[Controller]/create-document-type")]
-        public IActionResult createDocumentType(DocumentTypeModel dt)
+        public IActionResult createDocumentType(DocumentTypeDTO dt)
         {
             try
             {
@@ -48,14 +48,14 @@ namespace VoAnhVu_DuAn2.Controllers
                 {
                     return BadRequest("Id đã tồn tại ! Hãy nhập mã khác");
                 }
-                DocumentTypeEntity documentTypeEntity = new DocumentTypeEntity
+                DocumentTypeModel documentTypeModel = new DocumentTypeModel
                 {
                     DocumentTypeId = dt.DocumentTypeId,
                     DocumentTypeName = dt.DocumentTypeName,
                     GroupPermissionId = dt.GroupPermission.GroupPermissionId,
                 };
-                _documentTypeRepository.createDocumentType(documentTypeEntity);
-                return Ok(documentTypeEntity);
+                _documentTypeRepository.createDocumentType(documentTypeModel);
+                return Ok(documentTypeModel);
             }
             catch (Exception ex)
             {
@@ -64,18 +64,18 @@ namespace VoAnhVu_DuAn2.Controllers
         }
         [HttpPut]
         [Route("/api/[Controller]/update-document-type")]
-        public IActionResult updateDocumentType(DocumentTypeModel dt)
+        public IActionResult updateDocumentType(DocumentTypeDTO dt)
         {
             try
             {
-                DocumentTypeEntity documentTypeEntity = new DocumentTypeEntity
+                DocumentTypeModel documentTypeModel = new DocumentTypeModel
                 {
                     DocumentTypeId = dt.DocumentTypeId,
                     DocumentTypeName = dt.DocumentTypeName,
                     GroupPermissionId = dt.GroupPermission.GroupPermissionId,
                 };
-                _documentTypeRepository.updateDocumentType(documentTypeEntity);
-                return Ok(documentTypeEntity);
+                _documentTypeRepository.updateDocumentType(documentTypeModel);
+                return Ok(documentTypeModel);
             }
             catch (Exception ex)
             {

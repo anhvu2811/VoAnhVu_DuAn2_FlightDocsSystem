@@ -4,7 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using VoAnhVu_DuAn2.Entities;
+using VoAnhVu_DuAn2.DTO;
 using VoAnhVu_DuAn2.Models;
 using VoAnhVu_DuAn2.Repository;
 
@@ -39,7 +39,7 @@ namespace VoAnhVu_DuAn2.Controllers
         }
         [HttpPost]
         [Route("/api/[Controller]/create-flight")]
-        public IActionResult createFlight(FlightModel flight)
+        public IActionResult createFlight(FlightDTO flight)
         {
             try
             {
@@ -48,15 +48,15 @@ namespace VoAnhVu_DuAn2.Controllers
                 {
                     return BadRequest("Id đã tồn tại ! Hãy nhập mã khác");
                 }
-                FlightEntity flightEntity = new FlightEntity
+                FlightModel flightModel = new FlightModel
                 {
                     FlightId = flight.FlightId,
                     Date = flight.Date,
                     PointOfLoading = flight.PointOfLoading,
                     PointOfUnloading = flight.PointOfUnloading
                 };
-                _flightRepository.createFlight(flightEntity);
-                return Ok(flightEntity);
+                _flightRepository.createFlight(flightModel);
+                return Ok(flightModel);
             }
             catch (Exception ex)
             {
@@ -65,19 +65,19 @@ namespace VoAnhVu_DuAn2.Controllers
         }
         [HttpPut]
         [Route("/api/[Controller]/update-flight")]
-        public IActionResult updateFlight(FlightModel flight)
+        public IActionResult updateFlight(FlightDTO flight)
         {
             try
             {
-                FlightEntity flightEntity = new FlightEntity
+                FlightModel flightModel = new FlightModel
                 {
                     FlightId = flight.FlightId,
                     Date = flight.Date,
                     PointOfLoading = flight.PointOfLoading,
                     PointOfUnloading = flight.PointOfUnloading
                 };
-                _flightRepository.updateFlight(flightEntity);
-                return Ok(flightEntity);
+                _flightRepository.updateFlight(flightModel);
+                return Ok(flightModel);
             }
             catch (Exception ex)
             {

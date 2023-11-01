@@ -3,16 +3,17 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using VoAnhVu_DuAn2.Entities;
+using VoAnhVu_DuAn2.Data;
+using VoAnhVu_DuAn2.DTO;
 using VoAnhVu_DuAn2.Models;
 
 namespace VoAnhVu_DuAn2.Repository
 {
     public interface IDocumentTypeRepository
     {
-        List<DocumentTypeModel> getAllDocumentType();
-        void createDocumentType(DocumentTypeEntity dt);
-        void updateDocumentType(DocumentTypeEntity dt);
+        List<DocumentTypeDTO> getAllDocumentType();
+        void createDocumentType(DocumentTypeModel dt);
+        void updateDocumentType(DocumentTypeModel dt);
         bool deleteDocumentType(string id);
     }
     public class DocumentTypeRepository : IDocumentTypeRepository
@@ -23,11 +24,11 @@ namespace VoAnhVu_DuAn2.Repository
             _context = context;
         }
 
-        public void createDocumentType(DocumentTypeEntity dt)
+        public void createDocumentType(DocumentTypeModel dt)
         {
             try
             {
-                _context.DocumentTypeEntities.Add(dt);
+                _context.DocumentTypeModels.Add(dt);
                 _context.SaveChanges();
             }
             catch (Exception ex)
@@ -40,12 +41,12 @@ namespace VoAnhVu_DuAn2.Repository
         {
             try
             {
-                var dt = _context.DocumentTypeEntities.FirstOrDefault(c => c.DocumentTypeId == id);
+                var dt = _context.DocumentTypeModels.FirstOrDefault(c => c.DocumentTypeId == id);
                 if (dt is null)
                 {
                     return false;
                 }
-                _context.DocumentTypeEntities.Remove(dt);
+                _context.DocumentTypeModels.Remove(dt);
                 _context.SaveChanges();
                 return true;
             }
@@ -55,11 +56,11 @@ namespace VoAnhVu_DuAn2.Repository
             }
         }
 
-        public List<DocumentTypeModel> getAllDocumentType()
+        public List<DocumentTypeDTO> getAllDocumentType()
         {
-            var types = _context.DocumentTypeEntities
+            var types = _context.DocumentTypeModels
                 .Include(type => type.GroupPermission)
-                .Select(type => new DocumentTypeModel
+                .Select(type => new DocumentTypeDTO
                 {
                     DocumentTypeId = type.DocumentTypeId,
                     DocumentTypeName = type.DocumentTypeName,
@@ -68,11 +69,11 @@ namespace VoAnhVu_DuAn2.Repository
             return types;
         }
 
-        public void updateDocumentType(DocumentTypeEntity dt)
+        public void updateDocumentType(DocumentTypeModel dt)
         {
             try
             {
-                _context.DocumentTypeEntities.Update(dt);
+                _context.DocumentTypeModels.Update(dt);
                 _context.SaveChanges();
             }
             catch (Exception ex)

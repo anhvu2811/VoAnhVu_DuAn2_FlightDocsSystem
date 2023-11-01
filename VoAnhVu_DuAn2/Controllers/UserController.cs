@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using VoAnhVu_DuAn2.Entities;
+using VoAnhVu_DuAn2.DTO;
 using VoAnhVu_DuAn2.Models;
 using VoAnhVu_DuAn2.Repository;
 using VoAnhVu_DuAn2.Services;
@@ -28,7 +28,7 @@ namespace VoAnhVu_DuAn2.Controllers
         }
         [HttpPost]
         [Route("/api/[Controller]/login")]
-        public IActionResult Login([FromBody] LoginModel model)
+        public IActionResult Login([FromBody] LoginDTO model)
         {
             var user = _userRepository.GetUserByUserNameAndPassword(model.Email, model.Password);
             if (user == null)
@@ -105,7 +105,7 @@ namespace VoAnhVu_DuAn2.Controllers
         }
         [HttpPost]
         [Route("/api/[Controller]/create-user")]
-        public IActionResult createUser(UserModel user)
+        public IActionResult createUser(UserDTO user)
         {
             try
             {
@@ -114,7 +114,7 @@ namespace VoAnhVu_DuAn2.Controllers
                 {
                     return BadRequest("Id này đã tồn tại ! Hãy nhập mã khác.");
                 }
-                UserEntity userEntity = new UserEntity
+                UserModel userModel = new UserModel
                 {
                     UserId = user.UserId,
                     Avatar = user.Avatar,
@@ -126,8 +126,8 @@ namespace VoAnhVu_DuAn2.Controllers
                     Password = user.Password,
                     RoleId = user.Role.RoleId,
                 };
-                _userRepository.createUser(userEntity);
-                return Ok(userEntity);
+                _userRepository.createUser(userModel);
+                return Ok(userModel);
             }
             catch (Exception ex)
             {
@@ -136,11 +136,11 @@ namespace VoAnhVu_DuAn2.Controllers
         }
         [HttpPut]
         [Route("/api/[Controller]/update-user")]
-        public IActionResult updateUser(UserModel user)
+        public IActionResult updateUser(UserDTO user)
         {
             try
             {
-                UserEntity userEntity = new UserEntity
+                UserModel userModel = new UserModel
                 {
                     UserId = user.UserId,
                     Avatar = user.Avatar,
@@ -152,8 +152,8 @@ namespace VoAnhVu_DuAn2.Controllers
                     Password = user.Password,
                     RoleId = user.Role.RoleId
                 };
-                _userRepository.updateUser(userEntity);
-                return Ok(userEntity);
+                _userRepository.updateUser(userModel);
+                return Ok(userModel);
             }
             catch (Exception ex)
             {

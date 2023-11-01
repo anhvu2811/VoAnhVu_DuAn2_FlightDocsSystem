@@ -3,16 +3,17 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using VoAnhVu_DuAn2.Entities;
+using VoAnhVu_DuAn2.Data;
+using VoAnhVu_DuAn2.DTO;
 using VoAnhVu_DuAn2.Models;
 
 namespace VoAnhVu_DuAn2.Repository
 {
     public interface IGroupPermissionRepository
     {
-        List<GroupPermissionModel> getAllGroupPermission();
-        void createGroupPermission(GroupPermissionEntity gp);
-        void updateGroupPermission(GroupPermissionEntity gp);
+        List<GroupPermissionDTO> getAllGroupPermission();
+        void createGroupPermission(GroupPermissionModel gp);
+        void updateGroupPermission(GroupPermissionModel gp);
         bool deleteGroupPermission(string id);
     }
     public class GroupPermissionRepository : IGroupPermissionRepository
@@ -23,11 +24,11 @@ namespace VoAnhVu_DuAn2.Repository
             _context = context;
         }
 
-        public void createGroupPermission(GroupPermissionEntity gp)
+        public void createGroupPermission(GroupPermissionModel gp)
         {
             try
             {
-                _context.GroupPermissionEntities.Add(gp);
+                _context.GroupPermissionModels.Add(gp);
                 _context.SaveChanges();
             }
             catch (Exception ex)
@@ -40,12 +41,12 @@ namespace VoAnhVu_DuAn2.Repository
         {
             try
             {
-                var gp = _context.GroupPermissionEntities.FirstOrDefault(c => c.GroupPermissionId == id);
+                var gp = _context.GroupPermissionModels.FirstOrDefault(c => c.GroupPermissionId == id);
                 if (gp is null)
                 {
                     return false;
                 }
-                _context.GroupPermissionEntities.Remove(gp);
+                _context.GroupPermissionModels.Remove(gp);
                 _context.SaveChanges();
                 return true;
             }
@@ -55,11 +56,11 @@ namespace VoAnhVu_DuAn2.Repository
             }
         }
 
-        public List<GroupPermissionModel> getAllGroupPermission()
+        public List<GroupPermissionDTO> getAllGroupPermission()
         {
-            var gps = _context.GroupPermissionEntities
+            var gps = _context.GroupPermissionModels
                 .Include(gp => gp.Access)
-                .Select(gp => new GroupPermissionModel
+                .Select(gp => new GroupPermissionDTO
                 {
                     GroupPermissionId = gp.GroupPermissionId,
                     GroupPermissionName = gp.GroupPermissionName,
@@ -70,11 +71,11 @@ namespace VoAnhVu_DuAn2.Repository
             return gps;
         }
 
-        public void updateGroupPermission(GroupPermissionEntity gp)
+        public void updateGroupPermission(GroupPermissionModel gp)
         {
             try
             {
-                _context.GroupPermissionEntities.Update(gp);
+                _context.GroupPermissionModels.Update(gp);
                 _context.SaveChanges();
             }
             catch (Exception ex)

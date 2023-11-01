@@ -2,16 +2,16 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using VoAnhVu_DuAn2.Entities;
+using VoAnhVu_DuAn2.Data;
 using VoAnhVu_DuAn2.Models;
 
 namespace VoAnhVu_DuAn2.Repository
 {
     public interface IRoleRepository
     {
-        List<RoleEntity> getAllRole();
-        void createRole(RoleEntity role);
-        void updateRole(RoleEntity role);
+        List<RoleModel> getAllRole();
+        void createRole(RoleModel role);
+        void updateRole(RoleModel role);
         bool deleteRole(string id);
     }
     public class RoleRepository : IRoleRepository
@@ -22,11 +22,11 @@ namespace VoAnhVu_DuAn2.Repository
             _context = context;
         }
 
-        public void createRole(RoleEntity role)
+        public void createRole(RoleModel role)
         {
             try
             {
-                _context.RoleEntities.Add(role);
+                _context.RoleModels.Add(role);
                 _context.SaveChanges();
             }
             catch (Exception ex)
@@ -39,12 +39,12 @@ namespace VoAnhVu_DuAn2.Repository
         {
             try
             {
-                var role = _context.RoleEntities.FirstOrDefault(c => c.RoleId == id);
+                var role = _context.RoleModels.FirstOrDefault(c => c.RoleId == id);
                 if (role is null)
                 {
                     return false;
                 }
-                _context.RoleEntities.Remove(role);
+                _context.RoleModels.Remove(role);
                 _context.SaveChanges();
                 return true;
             }
@@ -54,16 +54,16 @@ namespace VoAnhVu_DuAn2.Repository
             }
         }
 
-        public List<RoleEntity> getAllRole()
+        public List<RoleModel> getAllRole()
         {
-            return _context.RoleEntities.ToList();
+            return _context.RoleModels.ToList();
         }
 
-        public void updateRole(RoleEntity role)
+        public void updateRole(RoleModel role)
         {
             try
             {
-                _context.RoleEntities.Update(role);
+                _context.RoleModels.Update(role);
                 _context.SaveChanges();
             }
             catch (Exception ex)

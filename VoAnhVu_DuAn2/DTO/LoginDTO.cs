@@ -4,9 +4,9 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace VoAnhVu_DuAn2.Models
+namespace VoAnhVu_DuAn2.DTO
 {
-    public class LoginModel
+    public class LoginDTO
     {
         [Required(ErrorMessage = "Email is required")]
         public string? Email { get; set; }

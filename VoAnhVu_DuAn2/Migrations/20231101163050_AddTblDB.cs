@@ -118,7 +118,7 @@ namespace VoAnhVu_DuAn2.Migrations
                     DocumentId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     DocumentName = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     FileUpLoad = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Version = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Version = table.Column<double>(type: "float", nullable: false),
                     CreateDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Note = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     DocumentTypeId = table.Column<string>(type: "nvarchar(450)", nullable: true),

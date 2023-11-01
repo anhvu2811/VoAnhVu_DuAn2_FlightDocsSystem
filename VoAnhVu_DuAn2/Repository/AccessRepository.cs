@@ -2,16 +2,16 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using VoAnhVu_DuAn2.Entities;
+using VoAnhVu_DuAn2.Data;
 using VoAnhVu_DuAn2.Models;
 
 namespace VoAnhVu_DuAn2.Repository
 {
     public interface IAccessRepository
     {
-        List<AccessEntity> getAllAccess();
-        void createAccess(AccessEntity access);
-        void updateAccess(AccessEntity access);
+        List<AccessModel> getAllAccess();
+        void createAccess(AccessModel access);
+        void updateAccess(AccessModel access);
         bool deleteAccess(string id);
     }
     public class AccessRepository : IAccessRepository
@@ -22,11 +22,11 @@ namespace VoAnhVu_DuAn2.Repository
             _context = context;
         }
 
-        public void createAccess(AccessEntity access)
+        public void createAccess(AccessModel access)
         {
             try
             {
-                _context.AccessEntities.Add(access);
+                _context.AccessModels.Add(access);
                 _context.SaveChanges();
             }
             catch (Exception ex)
@@ -39,12 +39,12 @@ namespace VoAnhVu_DuAn2.Repository
         {
             try
             {
-                var access = _context.AccessEntities.FirstOrDefault(c => c.AccessId == id);
+                var access = _context.AccessModels.FirstOrDefault(c => c.AccessId == id);
                 if (access is null)
                 {
                     return false;
                 }
-                _context.AccessEntities.Remove(access);
+                _context.AccessModels.Remove(access);
                 _context.SaveChanges();
                 return true;
             }
@@ -54,16 +54,16 @@ namespace VoAnhVu_DuAn2.Repository
             }
         }
 
-        public List<AccessEntity> getAllAccess()
+        public List<AccessModel> getAllAccess()
         {
-            return _context.AccessEntities.ToList();
+            return _context.AccessModels.ToList();
         }
 
-        public void updateAccess(AccessEntity access)
+        public void updateAccess(AccessModel access)
         {
             try
             {
-                _context.AccessEntities.Update(access);
+                _context.AccessModels.Update(access);
                 _context.SaveChanges();
             }
             catch (Exception ex)

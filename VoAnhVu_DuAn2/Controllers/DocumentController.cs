@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using VoAnhVu_DuAn2.Entities;
+using VoAnhVu_DuAn2.DTO;
 using VoAnhVu_DuAn2.Models;
 using VoAnhVu_DuAn2.Repository;
 
@@ -43,7 +43,7 @@ namespace VoAnhVu_DuAn2.Controllers
         }
         [HttpPost]
         [Route("/api/[Controller]/create-document")]
-        public IActionResult createDocument(DocumentModel dt)
+        public IActionResult createDocument(DocumentDTO dt)
         {
             try
             {
@@ -52,7 +52,21 @@ namespace VoAnhVu_DuAn2.Controllers
                 {
                     return BadRequest("Id đã tồn tại ! Hãy nhập mã khác");
                 }
-                DocumentEntity documentEntity = new DocumentEntity
+                int documentCount = _documentRepository.CountDocumentsForFlight(dt.Flight.FlightId);
+
+                if (documentCount > 0)
+                {
+                    var latestVersionDocument = _documentRepository.getAllDocument().Where(c => c.Flight.FlightId == dt.Flight.FlightId).OrderByDescending(c => c.Version).FirstOrDefault();
+                    if (latestVersionDocument != null)
+                    {
+                        dt.Version = Math.Round(latestVersionDocument.Version + 0.1, 1);
+                    }
+                }
+                else
+                {
+                    dt.Version = 1.0;
+                }
+                DocumentModel documentModel = new DocumentModel
                 {
                     DocumentId = dt.DocumentId,
                     DocumentName = dt.DocumentName,
@@ -64,8 +78,8 @@ namespace VoAnhVu_DuAn2.Controllers
                     FlightId = dt.Flight.FlightId,
                     UserId = dt.User.UserId
                 };
-                _documentRepository.createDocument(documentEntity);
-                return Ok(documentEntity);
+                _documentRepository.createDocument(documentModel);
+                return Ok(documentModel);
             }
             catch (Exception ex)
             {
@@ -74,11 +88,11 @@ namespace VoAnhVu_DuAn2.Controllers
         }
         [HttpPut]
         [Route("/api/[Controller]/update-document")]
-        public IActionResult updateDocument(DocumentModel dt)
+        public IActionResult updateDocument(DocumentDTO dt)
         {
             try
             {
-                DocumentEntity documentEntity = new DocumentEntity
+                DocumentModel documentModel = new DocumentModel
                 {
                     DocumentId = dt.DocumentId,
                     DocumentName = dt.DocumentName,
@@ -90,8 +104,8 @@ namespace VoAnhVu_DuAn2.Controllers
                     FlightId = dt.Flight.FlightId,
                     UserId = dt.User.UserId
                 };
-                _documentRepository.updateDocument(documentEntity);
-                return Ok(documentEntity);
+                _documentRepository.updateDocument(documentModel);
+                return Ok(documentModel);
             }
             catch (Exception ex)
             {

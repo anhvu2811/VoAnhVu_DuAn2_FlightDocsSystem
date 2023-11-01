@@ -7,14 +7,14 @@ using System.Linq;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
-using VoAnhVu_DuAn2.Entities;
+using VoAnhVu_DuAn2.DTO;
 using VoAnhVu_DuAn2.Models;
 
 namespace VoAnhVu_DuAn2.Services
 {
     public interface IAuthenticationService
     {
-        string GenerateToken(UserEntity user, string roleName);
+        string GenerateToken(UserModel user, string roleName);
     }
     public class AuthenticationService : IAuthenticationService
     {
@@ -25,7 +25,7 @@ namespace VoAnhVu_DuAn2.Services
             _appSettings = appSettings.Value;
         }
 
-        public string GenerateToken(UserEntity user, string roleName)
+        public string GenerateToken(UserModel user, string roleName)
         {
             var jwtTokenHandler = new JwtSecurityTokenHandler();
             var secretKeyBytes = Encoding.UTF8.GetBytes(_appSettings.SecretKey);
