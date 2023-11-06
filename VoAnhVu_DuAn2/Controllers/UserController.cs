@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Hosting;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -44,6 +45,7 @@ namespace VoAnhVu_DuAn2.Controllers
                 Token = _authenticationService.GenerateToken(user, roleName)
             });
         }
+        [Authorize]
         [HttpGet]
         [Route("/api/[Controller]/get-all-users")]
         public IActionResult getAllUsers()
@@ -62,6 +64,7 @@ namespace VoAnhVu_DuAn2.Controllers
                 return BadRequest(ex.Message);
             }
         }
+        [Authorize]
         [HttpGet]
         [Route("/api/[Controller]/get-user-by-id")]
         public IActionResult getUserById(string id)
@@ -80,6 +83,7 @@ namespace VoAnhVu_DuAn2.Controllers
                 return BadRequest(ex.Message);
             }
         }
+        [Authorize]
         [HttpGet]
         [Route("/api/[Controller]/search-user")]
         public IActionResult searchUser(string key)
@@ -98,6 +102,7 @@ namespace VoAnhVu_DuAn2.Controllers
                 return BadRequest(ex.Message);
             }
         }
+        [Authorize]
         [HttpPost]
         [Route("/api/[Controller]/create-user")]
         public IActionResult createUser(UserDTO user)
@@ -129,6 +134,7 @@ namespace VoAnhVu_DuAn2.Controllers
                 return BadRequest(ex.Message);
             }
         }
+        [Authorize]
         [HttpPut]
         [Route("/api/[Controller]/update-user")]
         public IActionResult updateUser(UserDTO user)
@@ -155,6 +161,7 @@ namespace VoAnhVu_DuAn2.Controllers
                 return BadRequest(ex.Message);
             }
         }
+        [Authorize]
         [HttpDelete]
         [Route("/api/[Controller]/delete-user")]
         public IActionResult deleteUser(string id)
@@ -173,6 +180,7 @@ namespace VoAnhVu_DuAn2.Controllers
                 return BadRequest(ex.Message);
             }
         }
+        [Authorize]
         [HttpPost]
         [Route("/api/[Controller]/change-password")]
         public IActionResult ChangePassword(string userId, string oldPassword, string newPassword)
@@ -187,6 +195,7 @@ namespace VoAnhVu_DuAn2.Controllers
                 return BadRequest(ex.Message);
             }
         }
+        [Authorize]
         [HttpPost]
         [Route("/api/[Controller]/update-avatar")]
         public IActionResult UpdateAvatar(string userId, IFormFile avatarFile)
@@ -221,6 +230,7 @@ namespace VoAnhVu_DuAn2.Controllers
                 return BadRequest("Lỗi khi cập nhật đường dẫn ảnh đại diện: " + ex.Message);
             }
         }
+        [Authorize]
         [HttpDelete]
         [Route("/api/[Controller]/update-avatar")]
         public IActionResult DeleteAvatar(string userId)
