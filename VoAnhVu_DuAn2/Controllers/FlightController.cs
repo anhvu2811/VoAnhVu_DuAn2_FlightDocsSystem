@@ -37,6 +37,24 @@ namespace VoAnhVu_DuAn2.Controllers
                 return BadRequest(ex.Message);
             }
         }
+        [HttpGet]
+        [Route("/api/[Controller]/get-flight-by-id")]
+        public IActionResult getFlightById(string id)
+        {
+            try
+            {
+                var flight = _flightRepository.getFlightById(id);
+                if (flight == null)
+                {
+                    return NotFound("Không tìm thấy chuyến bay.");
+                }
+                return Ok(flight);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
         [HttpPost]
         [Route("/api/[Controller]/create-flight")]
         public IActionResult createFlight(FlightDTO flight)

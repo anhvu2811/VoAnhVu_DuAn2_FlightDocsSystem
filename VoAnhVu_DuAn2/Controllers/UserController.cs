@@ -33,11 +33,6 @@ namespace VoAnhVu_DuAn2.Controllers
             var user = _userRepository.GetUserByUserNameAndPassword(model.Email, model.Password);
             if (user == null)
             {
-                //return Ok(new ApiResponse
-                //{
-                //    Success = false,
-                //    Message = "Invalid username/password"
-                //});
                 return BadRequest("Invalid username/password");
             }
             var userId = user.UserId;
@@ -46,7 +41,7 @@ namespace VoAnhVu_DuAn2.Controllers
             {
                 Success = true,
                 Message = "Authenticate success",
-                Data = _authenticationService.GenerateToken(user, roleName)
+                Token = _authenticationService.GenerateToken(user, roleName)
             });
         }
         [HttpGet]

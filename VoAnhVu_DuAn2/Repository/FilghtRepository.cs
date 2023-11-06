@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -63,7 +64,7 @@ namespace VoAnhVu_DuAn2.Repository
 
         public FlightDTO getFlightById(string id)
         {
-            var flight = _context.FlightModels.FirstOrDefault(c => c.FlightId == id);
+            var flight = _context.FlightModels.Include(f => f.DocumentModels).FirstOrDefault(c => c.FlightId == id);
             if (flight != null)
             {
                 var flightModel = new FlightDTO
@@ -71,7 +72,15 @@ namespace VoAnhVu_DuAn2.Repository
                     FlightId = flight.FlightId,
                     Date = flight.Date,
                     PointOfLoading = flight.PointOfLoading,
-                    PointOfUnloading = flight.PointOfUnloading
+                    PointOfUnloading = flight.PointOfUnloading,
+                    Documents = flight.DocumentModels.Select(d => new DocumentDTO {
+                        DocumentId = d.DocumentId,
+                        DocumentName = d.DocumentName,
+                        FileUpLoad = d.FileUpLoad,
+                        Version = d.Version,
+                        CreateDate = d.CreateDate,
+                        Note = d.Note,
+                    }).ToList()
                 };
                 return flightModel;
             }

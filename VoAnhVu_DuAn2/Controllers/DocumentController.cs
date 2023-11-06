@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Hosting;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -130,7 +131,7 @@ namespace VoAnhVu_DuAn2.Controllers
                 return BadRequest(ex.Message);
             }
         }
-
+        [Authorize(Roles = "System Admin, Nhân viên GO")]
         [HttpPost]
         [Route("/api/[Controller]/upload-file")]
         public IActionResult UploadFile(string documentId, IFormFile file)

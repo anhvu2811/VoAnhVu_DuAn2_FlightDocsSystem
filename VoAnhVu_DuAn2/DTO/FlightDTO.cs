@@ -11,5 +11,6 @@ namespace VoAnhVu_DuAn2.DTO
         public DateTime Date { get; set; }
         public string PointOfLoading { get; set; }
         public string PointOfUnloading { get; set; }
+        public List<DocumentDTO> Documents { get; set; }
     }
 }

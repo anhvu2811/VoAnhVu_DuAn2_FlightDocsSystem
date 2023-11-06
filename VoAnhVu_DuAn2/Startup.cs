@@ -106,9 +106,10 @@ namespace VoAnhVu_DuAn2
 
             services.AddAuthorization(options =>
             {
-                options.AddPolicy("StudentPolicy", policy => policy.RequireRole("Sinh viên"));
-                options.AddPolicy("TeacherPolicy", policy => policy.RequireRole("Giáo viên"));
-                options.AddPolicy("LeaderShipPolicy", policy => policy.RequireRole("Lãnh đạo"));
+                options.AddPolicy("SystemAdminPolicy", policy => policy.RequireRole("System Admin"));
+                options.AddPolicy("NhanVienGoPolicy", policy => policy.RequireRole("Nhân viên GO"));
+                options.AddPolicy("PhiCongPolicy", policy => policy.RequireRole("Phi công"));
+                options.AddPolicy("TiepVienPolicy", policy => policy.RequireRole("Tiếp viên"));
             });
         }
 

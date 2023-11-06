@@ -15,5 +15,6 @@ namespace VoAnhVu_DuAn2.Models
         public DateTime Date { get; set; }
         public string PointOfLoading { get; set; } 
         public string PointOfUnloading { get; set; }
+        public ICollection<DocumentModel> DocumentModels { get; set; }
     }
 }
